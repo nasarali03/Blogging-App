@@ -1,8 +1,9 @@
+import { createHmac } from "crypto";
 import mongoose from "mongoose";
 
 const userSchame = new mongoose.Schema(
   {
-    name: {
+    fullName: {
       type: String,
       required: true,
     },
@@ -29,6 +30,12 @@ const userSchame = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+userSchame.pre("save", function (next) {
+  const user = this;
+
+  if (!user.isModified("password")) return;
+});
 
 const User = mongoose.model("User", userSchame);
 
