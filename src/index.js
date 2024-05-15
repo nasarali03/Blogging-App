@@ -1,6 +1,11 @@
 import express from "express";
+import mongoose from "mongoose";
 import path from "path";
+import dotenv from "dotenv";
+import userRouter from "./routes/user.routes.js";
+import connectDB from "./db/connection.js";
 
+dotenv.config({ path: "../.env" });
 const app = express();
 const PORT = 8000;
 
@@ -10,8 +15,13 @@ app.set("views", view_path);
 
 console.log(path.resolve("views"));
 
+app.use("/user", userRouter);
+
 app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.listen(PORT, () => console.log(`Server is listening at ${PORT}`));
+connectDB.then(() => {
+  console.log("MongoDB Connected");
+  app.listen(PORT, () => console.log(`Server is listening at ${PORT}`));
+});
