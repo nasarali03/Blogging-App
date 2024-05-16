@@ -10,15 +10,13 @@ router.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-router.post("/signup", async (req, res) => {
-  const { fullName, email, password } = req.body;
+router.post("/signin", (req, res) => {
+  const { email, password } = req.body;
+});
 
-  await User.create({
-    fullName,
-    email,
-    password,
-  });
-  res.render("/");
+router.post("/signup", async (req, res) => {
+  await User.create(req.body);
+  res.redirect("/");
 });
 
 export default router;

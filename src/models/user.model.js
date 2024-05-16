@@ -1,7 +1,7 @@
 import { createHmac, randomBytes } from "crypto";
 import mongoose from "mongoose";
 
-const userSchame = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
@@ -14,7 +14,6 @@ const userSchame = new mongoose.Schema(
     },
     salt: {
       type: String,
-      required: true,
     },
     password: {
       type: String,
@@ -31,7 +30,7 @@ const userSchame = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchame.pre("save", function (next) {
+userSchema.pre("save", function (next) {
   const user = this;
 
   if (!user.isModified("password")) return;
@@ -42,9 +41,10 @@ userSchame.pre("save", function (next) {
     .digest("hex");
 
   this.salt = salt;
-  this.password = this.password;
+  this.password = hashPassword;
+  next();
 });
 
-const User = mongoose.model("User", userSchame);
+const User = mongoose.model("User", userSchema);
 
 export default User;
