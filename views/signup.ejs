@@ -10,11 +10,10 @@
     <%- include('./partials/nav') %>
 
         <div class="container mt-4">
-            <form action="/user/signup" method="POST">
+            <form action="/user/signup" method="post">
                 <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Full Name</label>
-                    <input type="email" name="fullName" class="form-control" id="exampleInputEmail1"
-                        aria-describedby="emailHelp">
+                    <label for="exampleInputName" class="form-label">Full Name</label>
+                    <input type="text" name="fullName" class="form-control" id="exampleInputName">
 
                 </div>
                 <div class="mb-3">
