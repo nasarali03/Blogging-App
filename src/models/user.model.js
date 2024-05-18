@@ -1,5 +1,6 @@
 import { createHmac, randomBytes } from "crypto";
 import mongoose from "mongoose";
+import { createTokenForUser } from "../services/authatication.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,6 +26,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["USER", "ADMIN"],
+      default: "USER",
     },
   },
   { timestamps: true }
@@ -44,6 +46,26 @@ userSchema.pre("save", function (next) {
   this.password = hashPassword;
   next();
 });
+
+userSchema.statics.matchPasswordAndGenerateToken =
+  async function matchPasswordAndGenerateToken(email, password) {
+    const user = await this.findOne({ email });
+
+    if (!user) throw new Error("User not found");
+
+    const salt = user.salt;
+    const hashedPassword = user.password;
+
+    const userProvidedHash = createHmac("sha256", salt)
+      .update(password)
+      .digest("hex");
+
+    if (hashedPassword !== userProvidedHash)
+      throw new Error("Incorrect password");
+    const token = createTokenForUser(user);
+
+    return token;
+  };
 
 const User = mongoose.model("User", userSchema);
 

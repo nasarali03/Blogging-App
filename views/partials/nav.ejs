@@ -10,19 +10,31 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Add Blog</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Nasar Ali
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                <% if (locals.user) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add-new">Add Blog</a>
+                    </li>
+                    <% } %>
+                        <% if (locals.user) { %>
 
-                    </ul>
-                </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <%=locals.user.fullName%>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+
+                                </ul>
+                            </li>
+                            <% } else{%>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/user/signup">Create Account</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/user/signin">Signin</a>
+                                </li>
+                                <%}%>
 
             </ul>
             <form class="d-flex" role="search">
@@ -32,3 +44,13 @@
         </div>
     </div>
 </nav>
+
+<% if (locals.error) { %>
+
+    <div class="container mt-4">
+        <div class="alert alert-danger" role="alert">
+            <%= locals.error %>
+        </div>
+    </div>
+
+    <% } %>
