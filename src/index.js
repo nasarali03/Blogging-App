@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import path from "path";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -11,7 +10,7 @@ import { checkForAuthanticationCookie } from "./middleware/authantication.middle
 dotenv.config({ path: "./.env" });
 
 const app = express();
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 const view_path = path.resolve("./views");
 app.set("view engine", "ejs");
@@ -21,7 +20,7 @@ app.use(cookieParser());
 app.use(checkForAuthanticationCookie("token"));
 
 app.use("/user", userRouter);
-app.use("/", blogRouter);
+app.use("/blog", blogRouter);
 app.get("/", (req, res) => {
   res.render("home", { user: req.user });
 });
