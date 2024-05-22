@@ -1,6 +1,9 @@
 import Router from "express";
-import User from "../models/user.model.js";
-import { createTokenForUser } from "../services/authatication.js";
+import {
+  loginUser,
+  logoutUser,
+  signupUser,
+} from "../controllers/user.contollers.js";
 
 const router = Router();
 
@@ -11,30 +14,10 @@ router.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-router.post("/signin", async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const token = await User.matchPasswordAndGenerateToken(email, password);
+router.post("/signin", loginUser);
 
-    res.cookie("token", token).redirect("/");
-  } catch (error) {
-    return res.render("signin", { error: "Incorrect email or password" });
-  }
-});
+router.post("/signup", signupUser);
 
-router.post("/signup", async (req, res) => {
-  const { fullName, email, password } = req.body;
-  const user = await User.create({
-    fullName,
-    email,
-    password,
-  });
-
-  res.redirect("/");
-});
-
-router.get("/logout", (req, res) => {
-  res.clearCookie("token").redirect("/");
-});
+router.get("/logout", logoutUser);
 
 export default router;
