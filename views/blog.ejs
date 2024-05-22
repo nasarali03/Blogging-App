@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('./partials/head') %>
+        <title><%- blog.title %></title>
+</head>
+
+<body>
+    <%- include('./partials/nav') %>
+        <%= JSON.stringify(user) %>
+            <%- include('./partials/scripts') %>
+</body>
+
+</html>
