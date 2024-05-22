@@ -6,6 +6,7 @@ import userRouter from "./routes/user.routes.js";
 import blogRouter from "./routes/blog.routes.js";
 import connectDB from "./db/connection.js";
 import { checkForAuthanticationCookie } from "./middleware/authantication.middleware.js";
+import Blog from "./models/blog.model.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -21,8 +22,9 @@ app.use(checkForAuthanticationCookie("token"));
 
 app.use("/user", userRouter);
 app.use("/blog", blogRouter);
-app.get("/", (req, res) => {
-  res.render("home", { user: req.user });
+app.get("/", async (req, res) => {
+  const allBlogs = await Blog.find({}).sort("-createdAt");
+  res.render("home", { user: req.user, blogs: allBlogs });
 });
 
 connectDB().then(() => {
