@@ -1,4 +1,5 @@
 import Router from "express";
+import { upload } from "../middleware/multer.middleware.js";
 import {
   loginUser,
   logoutUser,
@@ -16,7 +17,7 @@ router.get("/signup", (req, res) => {
 
 router.post("/signin", loginUser);
 
-router.post("/signup", signupUser);
+router.post("/signup", upload.single("profileImage"), signupUser);
 
 router.get("/logout", logoutUser);
 
