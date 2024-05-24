@@ -53,22 +53,6 @@
                 text-align: center;
                 /* Centers the heading */
             }
-
-            .authorContainer {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-top: 20px;
-            }
-
-            .authorContainer img {
-                margin-right: 10px;
-                border-radius: 50%;
-            }
-
-            .authorContainer span {
-                font-weight: bold;
-            }
         </style>
 </head>
 
@@ -85,24 +69,33 @@
             </pre>
         </div>
 
-        <div class="authorContainer container mt-4">
+        <div class=" container mt-4" style="margin-left: 7.5rem; font-weight: bold;">
 
-            <img src="<%=blog.createdBy.profileImageURL %>" width="50px" alt="">
+            <img src="<%=blog.createdBy.profileImageURL %>" width="50px" alt=""
+                style="border-radius: 100px; margin-right: 10px;">
             <span>
 
                 <%= blog.createdBy.fullName %>
             </span>
         </div>
         <div class="commnetContainer container mt-4 mb-4">
-            <h2>Comments</h2>
+            <h2>Comments(<%= comments.length %>)</h2>
             <% if (locals.user) { %>
-                <form action="/blog/comment" method="post">
+                <form action="/blog/comment/<%= blog._id %>" method="post">
                     <div class="mb-3">
                         <input type="text" name="content" class="form-control" placeholder="Enter your Comment">
                     </div>
                     <button type="submit" class="btn btn-sm btn-primary">Add</button>
                 </form>
                 <% } %>
+                    <div class="mt-4">
+                        <% comments.forEach(comment=> { %>
+                            <img src="<%=comment.createdBy.profileImageURL %>" width="50px" alt=""
+                                style="border-radius: 100px; margin-right: 10px;">
+                            <%= comment.createdBy.fullName %>:
+                                <pre><%= comment.content %></pre>
+                                <% }) %>
+                    </div>
         </div>
         <%- include('./partials/scripts') %>
 </body>
