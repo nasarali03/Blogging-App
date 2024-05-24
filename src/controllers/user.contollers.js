@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.utils.js";
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -13,10 +14,16 @@ const loginUser = async (req, res) => {
 
 const signupUser = async (req, res) => {
   const { fullName, email, password } = req.body;
+  console.log(req.file?.path);
+  const response = await uploadOnCloudinary(req.file?.path);
+  console.log(response);
+  const profileImageURL = response.url;
+
   await User.create({
     fullName,
     email,
     password,
+    profileImageURL,
   });
 
   res.redirect("/");
